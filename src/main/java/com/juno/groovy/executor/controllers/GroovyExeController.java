@@ -5,6 +5,8 @@ import java.util.concurrent.Future;
 import com.juno.groovy.executor.models.PendingObject;
 import com.juno.groovy.executor.services.GroovyExeServive;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,9 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 @RestController
 public class GroovyExeController {
+
+  private static final Logger logger = LoggerFactory.getLogger(GroovyExeController.class);
+
   @Autowired
   private GroovyExeServive GroovyExeService;
 

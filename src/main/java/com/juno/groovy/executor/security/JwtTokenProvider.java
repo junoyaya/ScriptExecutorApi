@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.juno.groovy.executor.models.Role;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenProvider {
+
+  private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
   @Value("${jtang.app.jwtSecret:secret-key}")
   private String secretKey;
@@ -79,6 +83,7 @@ public class JwtTokenProvider {
       Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
       return true;
     } catch (JwtException | IllegalArgumentException e) {
+      logger.error("Expired or invalid JWT token : " + token);
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Expired or invalid JWT token");
     }
   }

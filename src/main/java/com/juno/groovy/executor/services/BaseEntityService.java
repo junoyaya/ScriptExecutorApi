@@ -10,12 +10,16 @@ import com.juno.groovy.executor.models.AuditableEntity;
 import com.juno.groovy.executor.repository.BasicEntityRepo;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
 
 @Getter
 public abstract class BaseEntityService<E extends AuditableEntity, D extends E, I, R extends BasicEntityRepo<E, I>> {
+
+  private static final Logger logger = LoggerFactory.getLogger(BaseEntityService.class);
 
   private EntityMapper<D, E> mapper;
 
@@ -51,6 +55,7 @@ public abstract class BaseEntityService<E extends AuditableEntity, D extends E, 
     E entity = getMapper().dtoToEntity(dto);
     setEntityRelation(dto, entity);
     entity = getRepo().save(entity);
+    logger.info("Creating new entity " + getEntityName() + " by " + entity.getCreatedBy());
     return entity;
   }
 
@@ -60,6 +65,7 @@ public abstract class BaseEntityService<E extends AuditableEntity, D extends E, 
     mapper.updateModel(dto, entity);
     setEntityRelation(dto, entity);
     entity = repo.save(entity);
+    logger.info("Updating entity " + getEntityName() + " id: " + id);
     return entityToDto(entity);
   }
 
@@ -70,8 +76,10 @@ public abstract class BaseEntityService<E extends AuditableEntity, D extends E, 
       if (entityOpt.isPresent()) {
         E entity = entityOpt.get();
         repo.deleteById(id);
+        logger.info("Deleting entity " + getEntityName() + " id: " + id);
       }
     } catch (Exception e) {
+      logger.error("Failed deleting entity " + getEntityName() + " id: " + id);
       if (e instanceof ResponseErrorException) {
         throw e;
       } else if (e instanceof ConstraintViolationException) {

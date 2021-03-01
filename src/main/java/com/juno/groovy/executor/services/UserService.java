@@ -12,6 +12,8 @@ import com.juno.groovy.executor.security.JwtTokenProvider;
 
 import org.apache.logging.log4j.util.Strings;
 import org.mapstruct.factory.Mappers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +25,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService extends BaseEntityService<User, UserDataDTO, Long, UserRepository> {
+
+  private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -44,6 +48,7 @@ public class UserService extends BaseEntityService<User, UserDataDTO, Long, User
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
       return jwtTokenProvider.createToken(username, getRepo().findByUsername(username).getRole());
     } catch (AuthenticationException e) {
+      logger.error("Invalid username/password supplied for user: " + username);
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid username/password supplied");
     }
   }
@@ -64,9 +69,11 @@ public class UserService extends BaseEntityService<User, UserDataDTO, Long, User
   @Override
   protected void validateCreationInput(UserDataDTO dto) {
     if (Strings.isBlank(dto.getUsername()) || Strings.isBlank(dto.getPassword())) {
+      logger.error("User name and password must not be null or empty");
       throw new ResponseErrorException("User name and password must not be null or empty", HttpStatus.UNPROCESSABLE_ENTITY);
     }
     if (getRepo().existsByUsername(dto.getUsername())) {
+      logger.error("Username :" + dto.getUsername() + " is already in use");
       throw new ResponseErrorException("Username is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }

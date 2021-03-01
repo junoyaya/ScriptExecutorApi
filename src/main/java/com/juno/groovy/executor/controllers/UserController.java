@@ -3,6 +3,8 @@ package com.juno.groovy.executor.controllers;
 import com.juno.groovy.executor.dtos.UserDataDTO;
 import com.juno.groovy.executor.services.UserService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,8 @@ import io.swagger.annotations.ApiResponses;
 @RequestMapping("/users")
 @Api(tags = "users")
 public class UserController {
+
+  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
   @Autowired
   private UserService userService;

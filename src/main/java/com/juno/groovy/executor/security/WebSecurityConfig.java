@@ -35,17 +35,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     // Entry points
-    // allow anonymous access
     http
-        // .anonymous()
-        // .and()
         .authorizeRequests()
         .antMatchers("/users/signin**").permitAll()//
         .antMatchers("/users/signup**").permitAll()
         .and()
         .formLogin()
         .loginPage("/users/signin")
-        .permitAll();//
+        .permitAll();
 
     // Disallow everything else..
     http.authorizeRequests()
