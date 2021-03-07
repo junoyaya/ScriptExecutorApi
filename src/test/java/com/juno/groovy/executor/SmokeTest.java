@@ -2,7 +2,7 @@ package com.juno.groovy.executor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.juno.groovy.executor.services.GroovyExeServive;
+import com.juno.groovy.executor.services.GroovyRunnerServive;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class SmokeTest {
   @Autowired
-  private GroovyExeServive controller;
+  private GroovyRunnerServive controller;
 
   /*
    * Test the context is creating the controller, with an assertion

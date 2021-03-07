@@ -8,6 +8,8 @@ import com.juno.groovy.executor.mapper.UserMapper;
 import com.juno.groovy.executor.models.Role;
 import com.juno.groovy.executor.models.User;
 import com.juno.groovy.executor.repository.UserRepository;
+import com.juno.groovy.executor.security.CurrentUserInformation;
+import com.juno.groovy.executor.security.JwtResponse;
 import com.juno.groovy.executor.security.JwtTokenProvider;
 
 import org.apache.logging.log4j.util.Strings;
@@ -16,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -38,15 +41,21 @@ public class UserService extends BaseEntityService<User, UserDataDTO, Long, User
   private AuthenticationManager authenticationManager;
 
   @Autowired
+  CurrentUserInformation currentUserInformation;
+
+  @Autowired
   public UserService(UserRepository userRepo) {
     super(Mappers.getMapper(UserMapper.class), userRepo);
   }
 
   @Transactional
-  public String signin(String username, String password) {
+  public ResponseEntity<JwtResponse> signin(String username, String password) {
     try {
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-      return jwtTokenProvider.createToken(username, getRepo().findByUsername(username).getRole());
+      String jwt = jwtTokenProvider.createToken(username, getRepo().findByUsername(username).getRole());
+      return ResponseEntity.ok(new JwtResponse(jwt, currentUserInformation.currentUserId()));
+      // currentUserInformation.currentUserRole(),
+      // currentUserInformation.currentUserAutorities()
     } catch (AuthenticationException e) {
       logger.error("Invalid username/password supplied for user: " + username);
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid username/password supplied");
@@ -86,6 +95,16 @@ public class UserService extends BaseEntityService<User, UserDataDTO, Long, User
     // user.setRoles(roles);
 
     user.setRole(Role.valueOf(dto.getUserRole().toUpperCase()));
+  }
+
+  public User getUserInfo(String currentUserId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public String logout() {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

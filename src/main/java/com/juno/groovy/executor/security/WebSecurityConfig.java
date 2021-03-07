@@ -29,33 +29,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
+    // ?TODO Enable cors (Cross-Origin Resource Sharing);
     // Disable CSRF (cross site request forgery)
     http.csrf().disable()
         // No session will be created or used by spring security
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-    // Entry points
-    http
-        .authorizeRequests()
-        .antMatchers("/users/signin**").permitAll()//
-        .antMatchers("/users/signup**").permitAll()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        .formLogin()
-        .loginPage("/users/signin")
-        .permitAll();
-
-    // Disallow everything else..
-    http.authorizeRequests()
-        .anyRequest().authenticated();
+        // Entry points
+        .authorizeRequests().antMatchers("/auth/**").permitAll()//
+        // .and()
+        // .formLogin().loginPage("/auth/signin").permitAll()
+        .and()
+        // Disallow everything else..
+        .authorizeRequests().antMatchers("/api/**").authenticated();
 
     // If a user try to access a resource without having enough permissions
-    http.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).accessDeniedPage("/login");
+    http.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).accessDeniedPage("/auth/signin");
 
     // Apply JWT
     http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
 
-    // Optional, if you want to test the API from a browser
-    // http.httpBasic();
   }
 
   @Override
@@ -67,11 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/configuration/**")//
         .antMatchers("/webjars/**")//
         .antMatchers("/public");
-
-    // Un-secure H2 Database (for testing purposes, H2 console shouldn't be unprotected in production)
-    // .and()
-    // .ignoring()
-    // .antMatchers("/h2-console/**/**");
   }
 
 
