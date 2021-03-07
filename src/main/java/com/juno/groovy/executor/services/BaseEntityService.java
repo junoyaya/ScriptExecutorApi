@@ -31,11 +31,6 @@ public abstract class BaseEntityService<E extends AuditableEntity, D extends E, 
     this.repo = repo;
   }
 
-  // @Transactional
-  // public Page<D> findEntities(Specification<E> spec, Pageable pageable) {
-  // return repo.findAll(spec, pageable).map(entity -> entityToDto(entity));
-  // }
-
   @Transactional
   public D findEntity(I id) {
     E entity = findEntityById(id);

@@ -32,7 +32,7 @@ public class UserController {
 
   @PostMapping("/signin")
   @ApiOperation(value = "User signin")
-  @ApiResponses(value = {//
+  @ApiResponses(value = {
       @ApiResponse(code = 400, message = "Something went wrong"),
       @ApiResponse(code = 422, message = "Invalid username/password supplied")})
   public ResponseEntity<?> login(@Validated @RequestBody JwtRequest loginRequest) {

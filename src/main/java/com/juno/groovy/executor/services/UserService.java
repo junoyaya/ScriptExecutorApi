@@ -53,9 +53,8 @@ public class UserService extends BaseEntityService<User, UserDataDTO, Long, User
     try {
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
       String jwt = jwtTokenProvider.createToken(username, getRepo().findByUsername(username).getRole());
-      return ResponseEntity.ok(new JwtResponse(jwt, currentUserInformation.currentUserId()));
-      // currentUserInformation.currentUserRole(),
-      // currentUserInformation.currentUserAutorities()
+      return ResponseEntity.ok(new JwtResponse(jwt, currentUserInformation.currentUserId(), currentUserInformation.currentUserRole().toString()));
+      // TODO currentUserInformation.currentUserAutorities()
     } catch (AuthenticationException e) {
       logger.error("Invalid username/password supplied for user: " + username);
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid username/password supplied");

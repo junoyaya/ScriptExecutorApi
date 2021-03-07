@@ -11,6 +11,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Relation(collectionRelation = "users", itemRelation = "user")
 public class UserDataDTO extends User {
-  // List<String> userRoles;
   String userRole;
 }

@@ -29,7 +29,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
-    // ?TODO Enable cors (Cross-Origin Resource Sharing);
     // Disable CSRF (cross site request forgery)
     http.csrf().disable()
         // No session will be created or used by spring security
@@ -54,11 +53,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     // Allow swagger to be accessed without authentication
-    web.ignoring().antMatchers("/v2/api-docs")//
-        .antMatchers("/swagger-resources/**")//
-        .antMatchers("/swagger-ui.html")//
-        .antMatchers("/configuration/**")//
-        .antMatchers("/webjars/**")//
+    web.ignoring().antMatchers("/v2/api-docs")
+        .antMatchers("/swagger-resources/**")
+        .antMatchers("/swagger-ui.html")
+        .antMatchers("/configuration/**")
+        .antMatchers("/webjars/**")
         .antMatchers("/public");
   }
 

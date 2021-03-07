@@ -57,7 +57,6 @@ public class CurrentUserInformation {
     // if (authentication == null) {
     // return autorities;
     // }
-    //
     // for (GrantedAuthority auth : authentication.getAuthorities()) {
     // autorities.add(auth.getAuthority());
     // }

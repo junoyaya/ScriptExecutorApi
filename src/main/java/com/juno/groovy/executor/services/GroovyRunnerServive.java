@@ -19,6 +19,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,7 @@ public class GroovyRunnerServive implements ApplicationContextAware {
     return new GroovyShell(groovyClassLoader, groovyBinding, compilerConfiguration);
   }
 
-  // @Async // TODO?
+  @Async
   public Map<String, Future<String>> runScript(String scriptContent, String currentUserId) {
     logger.info("Running script. User: " + currentUserId);
 
@@ -69,31 +70,6 @@ public class GroovyRunnerServive implements ApplicationContextAware {
 
     logger.info("Finish running script. User: " + currentUserId);
     return map;
-
-    // Callable<Map<String, Future<String>>> callable = () -> {
-    // Map<String, Future<String>> map = new HashMap<>();
-    // logger.info("Processing script with user " + currentUserId);
-    //
-    // Script script = groovyShell.parse(scriptContent);
-    // String result = String.valueOf(script.run());
-    // map.put(currentUserId, new AsyncResult<>(result));
-    //
-    // logger.info("Finish script with user " + currentUserId);
-    // return map;
-    // };
-    //
-    // Future<Map<String, Future<String>>> submit = executorService.submit(callable);
-    // executorService.shutdown();
-    // try {
-    // return submit.get();
-    // } catch (InterruptedException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // } catch (ExecutionException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // return null;
   }
 
   private Binding createBinding() {

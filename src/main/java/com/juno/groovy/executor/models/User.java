@@ -22,7 +22,7 @@ public class User extends AuditableEntity {
   private String username;
   private String password;
   private boolean isActive;
-  private Role role;// TODO or roles?
+  private Role role;
   // @ElementCollection
   // @CollectionTable(name = "userRoles", joinColumns = @JoinColumn(name = "userId"))
   // @Column(name = "role")
