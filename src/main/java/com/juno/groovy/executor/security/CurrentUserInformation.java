@@ -53,13 +53,6 @@ public class CurrentUserInformation {
 
   public List<String> currentUserAutorities() {
     List<String> autorities = new ArrayList<>();
-    // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    // if (authentication == null) {
-    // return autorities;
-    // }
-    // for (GrantedAuthority auth : authentication.getAuthorities()) {
-    // autorities.add(auth.getAuthority());
-    // }
     return autorities;
   }
 

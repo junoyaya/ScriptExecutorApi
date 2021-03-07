@@ -27,7 +27,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         .withUsername(username)
         .password(user.getPassword())
         .authorities(user.getRole())
-        // .authorities(user.getRoles())
         .accountExpired(false)
         .accountLocked(false)
         .credentialsExpired(false)

@@ -23,9 +23,5 @@ public class User extends AuditableEntity {
   private String password;
   private boolean isActive;
   private Role role;
-  // @ElementCollection
-  // @CollectionTable(name = "userRoles", joinColumns = @JoinColumn(name = "userId"))
-  // @Column(name = "role")
-  // private List<Role> roles;
 
 }

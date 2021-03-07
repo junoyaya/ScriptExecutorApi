@@ -35,9 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         // Entry points
-        .authorizeRequests().antMatchers("/auth/**").permitAll()//
-        // .and()
-        // .formLogin().loginPage("/auth/signin").permitAll()
+        .authorizeRequests().antMatchers("/auth/**").permitAll()
         .and()
         // Disallow everything else..
         .authorizeRequests().antMatchers("/api/**").authenticated();

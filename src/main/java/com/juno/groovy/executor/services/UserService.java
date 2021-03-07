@@ -44,6 +44,9 @@ public class UserService extends BaseEntityService<User, UserDataDTO, Long, User
   CurrentUserInformation currentUserInformation;
 
   @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
   public UserService(UserRepository userRepo) {
     super(Mappers.getMapper(UserMapper.class), userRepo);
   }
@@ -54,7 +57,6 @@ public class UserService extends BaseEntityService<User, UserDataDTO, Long, User
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
       String jwt = jwtTokenProvider.createToken(username, getRepo().findByUsername(username).getRole());
       return ResponseEntity.ok(new JwtResponse(jwt, currentUserInformation.currentUserId(), currentUserInformation.currentUserRole().toString()));
-      // TODO currentUserInformation.currentUserAutorities()
     } catch (AuthenticationException e) {
       logger.error("Invalid username/password supplied for user: " + username);
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid username/password supplied");
@@ -88,22 +90,10 @@ public class UserService extends BaseEntityService<User, UserDataDTO, Long, User
 
   @Override
   protected void setEntityRelation(UserDataDTO dto, User user) {
-    // List<Role> roles = new ArrayList<>();
-    // List<String> userRoles = dto.getUserRoles();
-    // userRoles.forEach(r -> roles.add(Role.valueOf(r.toUpperCase())));
-    // user.setRoles(roles);
-
     user.setRole(Role.valueOf(dto.getUserRole().toUpperCase()));
   }
 
   public User getUserInfo(String currentUserId) {
-    // TODO Auto-generated method stub
-    return null;
+    return userRepository.findByUsername(currentUserId);
   }
-
-  public String logout() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
 }
